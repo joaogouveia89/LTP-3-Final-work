@@ -1,5 +1,21 @@
 # LTP-3-Final-work
 Morato's final work
+
+Cronograma e critérios de avaliação:
+1 - O trabalho deverá ser feito individual.  2 - O valor do trabalho será de 10 pontos
+3 – Data da Entrega: 05/11/2015.           
+4 – Forma de avaliação: 
+No laboratório – prova prática a partir do trabalho. (10 pontos para prova prática). O aluno deverá encaminhar as fontes do trabalho com a prova para caixa postal ltp3manha@gmail.com (turma da manhã) ou ltp3noite@gmail.com (turma da noite) durante a prova.
+Será verificado - Documentação; nomenclatura de pacotes, classes, atributos e métodos; desenvolvimento dentro da metodologia de orientação a objeto; verificação detalhada do funcionamento. 
+Observação: 
+Trabalhos entregues com erro de compilação não serão avaliados.
+A nota do trabalho copiado será divida pelo número de trabalhos copiados;
+
+Sistema de Controle de Vendas - SISVEN
+Implemente um conjunto de classes para um sistema de controle de vendas. A empresa necessita manter informações sobre seus clientes, vendas e produtos. Para isso, foi feito o seguinte projeto que deve ser implementado usando Java:
+
+
+
 Classe Cliente: - pacote: dados
 Atributos: código (int), cpf (String), nome (String), telefone (String), email (String), dataInclusao (GregorianCalendar), dataUltAlteracao. Todos com acesso privado. O código do cliente é um nº sequencial gerado pelo sistema.
 Método construtor para inicializar os atributos por meio de parâmetros;
