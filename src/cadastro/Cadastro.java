@@ -1,6 +1,8 @@
 package cadastro;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -146,4 +148,105 @@ public class Cadastro {
 		
 		return vendasPeriodo;
 	}
+	
+	//Métodos de backup
+	
+	public static boolean carregarClientes(){
+		
+		try{
+			File file = new File("database/clientes.txt");
+			if(!file.exists()){
+				file.createNewFile();
+			}
+			BufferedReader reader = new BufferedReader(new FileReader("database/clientes.txt"));
+			while(true){				
+				String linha = reader.readLine();
+				if(linha == null) break;
+				
+				// recuperando os dados
+				int codigo = Integer.parseInt(linha.substring(0,5));
+				String nome = linha.substring(5, 65).trim();
+				String cpf = linha.substring(65,125).trim();
+				String telefone = linha.substring(125,185).trim();
+				String email = linha.substring(185,245).trim();
+				String dtInclusaoStr = linha.substring(245,305).trim();
+				String dtAlteracaoStr = linha.substring(306).trim();
+				
+				int ano;
+				int mes;
+				int dia;
+				if(dtInclusaoStr.charAt(6) == ','){	
+					ano = Integer.parseInt(dtInclusaoStr.substring(0,4));
+					mes = Integer.parseInt(dtInclusaoStr.substring(5,6));
+					dia = Integer.parseInt(dtInclusaoStr.substring(7));
+				}
+				else{
+					ano = Integer.parseInt(dtInclusaoStr.substring(0,4));
+					mes = Integer.parseInt(dtInclusaoStr.substring(5,7));
+					dia = Integer.parseInt(dtInclusaoStr.substring(8));
+				}
+				
+				GregorianCalendar dtInclusao = new GregorianCalendar(ano,mes,dia);
+				
+				if(dtAlteracaoStr.charAt(6) == ','){
+					ano = Integer.parseInt(dtInclusaoStr.substring(0,4));
+					mes = Integer.parseInt(dtAlteracaoStr.substring(5,6));
+					dia = Integer.parseInt(dtAlteracaoStr.substring(7));
+				}
+				else{
+					ano = Integer.parseInt(dtInclusaoStr.substring(0,4));
+					mes = Integer.parseInt(dtAlteracaoStr.substring(5,7));
+					dia = Integer.parseInt(dtAlteracaoStr.substring(8));
+				}
+				
+				GregorianCalendar dataUltAlteracao = new GregorianCalendar(ano,mes,dia);
+				
+				
+				Cliente auxCliente = new Cliente(codigo, cpf, nome, telefone, email, dtInclusao, dataUltAlteracao);
+				
+				clientes.add(auxCliente);
+			}
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.exit(1);
+		}
+		return true;
+	}
+	
+	public static void atualizarClientes(){
+			try {
+				BufferedWriter writer = new BufferedWriter(new FileWriter("database/clientes.txt"));
+				for(Cliente auxClient: clientes){
+					String codigo = String.valueOf(auxClient.getCodigo());
+					int zerosEsquerda = 5 - codigo.length();
+					for (int i=1; i <= zerosEsquerda; i++) codigo = "0" + codigo;
+					String nome = auxClient.getNome();
+					int espacosDireita = 60 - nome.length();
+					for (int i=1; i <= espacosDireita; i++) nome += " ";
+					String cpf = auxClient.getCpf();
+					espacosDireita = 60 - cpf.length();
+					for (int i=1; i <= espacosDireita; i++) cpf += " ";
+					String telefone = auxClient.getTelefone();
+					espacosDireita = 60 - telefone.length();
+					for (int i=1; i <= espacosDireita; i++) telefone += " ";
+					String email = auxClient.getEmail();
+					espacosDireita = 60 - email.length();
+					for (int i=1; i <= espacosDireita; i++) email += " ";
+					GregorianCalendar dtInclusaoObj = auxClient.getDataInclusao();
+					String dtInclusao = ""+dtInclusaoObj.get(Calendar.YEAR)+","+(dtInclusaoObj.get(Calendar.MONTH)+1)+","+dtInclusaoObj.get(Calendar.DAY_OF_MONTH);
+					espacosDireita = 60 - dtInclusao.length();
+					for (int i=1; i <= espacosDireita; i++) dtInclusao += " ";
+					GregorianCalendar dataUltAlteracaoObj = auxClient.getDataUltAlteracao();
+					String dataUltAlteracao = ""+dataUltAlteracaoObj.get(Calendar.YEAR)+","+(dataUltAlteracaoObj.get(Calendar.MONTH)+1)+","+dataUltAlteracaoObj.get(Calendar.DAY_OF_MONTH);
+					
+					writer.write(codigo+nome+cpf+telefone+email+dtInclusao+dataUltAlteracao+"\n");
+				}
+				writer.close();
+			
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+				System.exit(1);
+			}
+						
+		}
 }

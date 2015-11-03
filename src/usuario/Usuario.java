@@ -9,6 +9,9 @@ import dados.Produto;
 import erros.SisVendasException;
 
 public class Usuario {
+	
+	public static Scanner leia = new Scanner(System.in);
+	
 	public static void main(String[] args) throws SisVendasException{
 		char op = 'n';
 		String nome,cpf,telefone,email;
@@ -16,39 +19,33 @@ public class Usuario {
 		double precoUnitario;
 		GregorianCalendar dataInclusao,dataUltAlteracao;
 		
-		Scanner leia = new Scanner(System.in);
+		Cadastro.carregarClientes();
 		
-		System.out.println("----PRODUTO----");
+		System.out.println("----Cliente----");
 		do{
-			System.out.println("Codigo: ");
+			System.out.println("codigo: ");
 			codigo = leia.nextInt();
-			System.out.println("Nome Produto: ");
+			System.out.println("Nome: ");
 			leia.nextLine();
 			nome = leia.nextLine();
-			System.out.println("Preço Unitário: ");
-			precoUnitario = leia.nextDouble();
+			System.out.println("telefone: ");
+			telefone = leia.nextLine();
+			System.out.println("cpf: ");
+			cpf = leia.nextLine();
+			System.out.println("email: ");
+			email = leia.nextLine();
 			
 			dataInclusao = new GregorianCalendar();
 			dataUltAlteracao = new GregorianCalendar();
 			
-			Produto produto = new Produto(codigo, nome, precoUnitario, dataInclusao, dataUltAlteracao);
+			Cliente cliente = new Cliente(codigo, cpf, nome, telefone, email, dataInclusao, dataUltAlteracao);
 			
-			Cadastro.incluirProduto(produto);
-			System.out.println("Cadastrar mais produtos? ");
+			Cadastro.incluirCliente(cliente);
+			System.out.println("Cadastrar mais clientes? ");
 			op = leia.next().charAt(0);
 		}while(op=='s');
 		
-		int codigoEsc;
-		//ArrayList<Cliente> listaAlfabetica = new ArrayList<Cliente>();
-		
-		System.out.println("codigo esc: ");
-		codigoEsc = leia.nextInt(); 
-		
-		//listaAlfabetica = Cadastro.listaClientesEmOrdemAlfabetica();
-		
-		//System.out.println("nome: "+ resultado.getNome());
-		Produto prod = Cadastro.buscaProdutoPeloCodigo(codigoEsc);
-		System.out.println("Produto: " + prod.getNome());
+		Cadastro.atualizarClientes();
 		
 	}
 }
