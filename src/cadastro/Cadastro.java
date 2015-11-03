@@ -164,7 +164,6 @@ public class Cadastro {
 			int i = 1;
 			while(true){				
 				String linha = reader.readLine();
-				System.out.println("linha");
 				if(linha == null) break;
 				
 				// recuperando os dados
@@ -251,4 +250,96 @@ public class Cadastro {
 			}
 						
 		}
+	
+	public static void carregarProdutos(){
+		try{
+			File file = new File("database/produtos.txt");
+			if(!file.exists()){
+				file.createNewFile();
+			}
+			BufferedReader reader = new BufferedReader(new FileReader("database/produtos.txt"));
+			int i = 1;
+			while(true){				
+				String linha = reader.readLine();
+				if(linha == null) break;
+				
+				// recuperando os dados
+				int codigo = Integer.parseInt(linha.substring(0,5));
+				String nome = linha.substring(5, 65).trim();
+				String precoUnitarioStr = linha.substring(65,125).trim();
+				
+				double precoUnitario = Double.parseDouble(precoUnitarioStr);
+				
+				String dtInclusaoStr = linha.substring(125,185).trim();
+				String dtAlteracaoStr = linha.substring(185).trim();
+				
+				int ano;
+				int mes;
+				int dia;
+				if(dtInclusaoStr.charAt(6) == ','){	
+					ano = Integer.parseInt(dtInclusaoStr.substring(0,4));
+					mes = Integer.parseInt(dtInclusaoStr.substring(5,6));
+					dia = Integer.parseInt(dtInclusaoStr.substring(7));
+				}
+				else{
+					ano = Integer.parseInt(dtInclusaoStr.substring(0,4));
+					mes = Integer.parseInt(dtInclusaoStr.substring(5,7));
+					dia = Integer.parseInt(dtInclusaoStr.substring(8));
+				}
+				
+				GregorianCalendar dtInclusao = new GregorianCalendar(ano,mes,dia);
+				
+				if(dtAlteracaoStr.charAt(6) == ','){
+					ano = Integer.parseInt(dtInclusaoStr.substring(0,4));
+					mes = Integer.parseInt(dtAlteracaoStr.substring(5,6));
+					dia = Integer.parseInt(dtAlteracaoStr.substring(7));
+				}
+				else{
+					ano = Integer.parseInt(dtInclusaoStr.substring(0,4));
+					mes = Integer.parseInt(dtAlteracaoStr.substring(5,7));
+					dia = Integer.parseInt(dtAlteracaoStr.substring(8));
+				}
+				
+				GregorianCalendar dataUltAlteracao = new GregorianCalendar(ano,mes,dia);
+				
+				
+				Produto auxProduto = new Produto(codigo, nome, precoUnitario, dtInclusao, dataUltAlteracao);
+				
+				produtos.add(auxProduto);
+			}
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.exit(1);
+		}
+	}
+	
+	public static void atualizarProdutos(){
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("database/produtos.txt"));
+			for(Produto auxProduto: produtos){
+				String codigo = String.valueOf(auxProduto.getCodigo());
+				int zerosEsquerda = 5 - codigo.length();
+				for (int i=1; i <= zerosEsquerda; i++) codigo = "0" + codigo;
+				String nome = auxProduto.getNome();
+				int espacosDireita = 60 - nome.length();
+				for (int i=1; i <= espacosDireita; i++) nome += " ";
+				String precoUnitario = String.valueOf(auxProduto.getPrecoUnitario());
+				espacosDireita = 60 - precoUnitario.length();
+				for (int i=1; i <= espacosDireita; i++) precoUnitario += " ";
+				GregorianCalendar dtInclusaoObj = auxProduto.getDataInclusao();
+				String dtInclusao = ""+dtInclusaoObj.get(Calendar.YEAR)+","+(dtInclusaoObj.get(Calendar.MONTH))+","+dtInclusaoObj.get(Calendar.DAY_OF_MONTH);
+				espacosDireita = 60 - dtInclusao.length();
+				for (int i=1; i <= espacosDireita; i++) dtInclusao += " ";
+				GregorianCalendar dataUltAlteracaoObj = auxProduto.getDataUltAlteracao();
+				String dataUltAlteracao = ""+dataUltAlteracaoObj.get(Calendar.YEAR)+","+(dataUltAlteracaoObj.get(Calendar.MONTH))+","+dataUltAlteracaoObj.get(Calendar.DAY_OF_MONTH);
+				
+				writer.write(codigo+nome+precoUnitario+dtInclusao+dataUltAlteracao+"\n");
+			}
+			writer.close();
+		
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			System.exit(1);
+		}
+	}
 }

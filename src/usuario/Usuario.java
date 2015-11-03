@@ -19,33 +19,31 @@ public class Usuario {
 		double precoUnitario;
 		GregorianCalendar dataInclusao,dataUltAlteracao;
 		
+		//Carregando base de dados
 		Cadastro.carregarClientes();
+		Cadastro.carregarProdutos();
 		
-		System.out.println("----Cliente----");
+		System.out.println("----Produto----");
 		do{
 			System.out.println("codigo: ");
 			codigo = leia.nextInt();
 			System.out.println("Nome: ");
 			leia.nextLine();
 			nome = leia.nextLine();
-			System.out.println("telefone: ");
-			telefone = leia.nextLine();
-			System.out.println("cpf: ");
-			cpf = leia.nextLine();
-			System.out.println("email: ");
-			email = leia.nextLine();
+			System.out.println("preco: ");
+			precoUnitario = leia.nextDouble();
 			
 			dataInclusao = new GregorianCalendar();
 			dataUltAlteracao = new GregorianCalendar();
 			
-			Cliente cliente = new Cliente(codigo, cpf, nome, telefone, email, dataInclusao, dataUltAlteracao);
+			Produto produto = new Produto(codigo, nome, precoUnitario, dataInclusao, dataUltAlteracao);
 			
-			Cadastro.incluirCliente(cliente);
-			System.out.println("Cadastrar mais clientes? ");
+			Cadastro.incluirProduto(produto);
+			System.out.println("Cadastrar mais PRODUTOS? ");
 			op = leia.next().charAt(0);
 		}while(op=='s');
 		
-		Cadastro.atualizarClientes();
+		Cadastro.atualizarProdutos();
 		
 	}
 }
