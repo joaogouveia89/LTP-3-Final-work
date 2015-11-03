@@ -18,6 +18,8 @@ public class Cadastro {
 	public static ArrayList<Produto> produtos = new ArrayList<Produto>();
 	public static ArrayList<Venda> vendas = new ArrayList<Venda>();
 	
+	private static int numRegistrosMantidos = 0;
+	
 	//Lista de clientes
 	public static void incluirCliente(Cliente cliente){
 		clientes.add(cliente);
@@ -151,7 +153,7 @@ public class Cadastro {
 	
 	//Métodos de backup
 	
-	public static boolean carregarClientes(){
+	public static void carregarClientes(){
 		
 		try{
 			File file = new File("database/clientes.txt");
@@ -159,8 +161,10 @@ public class Cadastro {
 				file.createNewFile();
 			}
 			BufferedReader reader = new BufferedReader(new FileReader("database/clientes.txt"));
+			int i = 1;
 			while(true){				
 				String linha = reader.readLine();
+				System.out.println("linha");
 				if(linha == null) break;
 				
 				// recuperando os dados
@@ -170,7 +174,7 @@ public class Cadastro {
 				String telefone = linha.substring(125,185).trim();
 				String email = linha.substring(185,245).trim();
 				String dtInclusaoStr = linha.substring(245,305).trim();
-				String dtAlteracaoStr = linha.substring(306).trim();
+				String dtAlteracaoStr = linha.substring(305).trim();
 				
 				int ano;
 				int mes;
@@ -203,14 +207,12 @@ public class Cadastro {
 				
 				
 				Cliente auxCliente = new Cliente(codigo, cpf, nome, telefone, email, dtInclusao, dataUltAlteracao);
-				
 				clientes.add(auxCliente);
 			}
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.exit(1);
 		}
-		return true;
 	}
 	
 	public static void atualizarClientes(){
@@ -233,11 +235,11 @@ public class Cadastro {
 					espacosDireita = 60 - email.length();
 					for (int i=1; i <= espacosDireita; i++) email += " ";
 					GregorianCalendar dtInclusaoObj = auxClient.getDataInclusao();
-					String dtInclusao = ""+dtInclusaoObj.get(Calendar.YEAR)+","+(dtInclusaoObj.get(Calendar.MONTH)+1)+","+dtInclusaoObj.get(Calendar.DAY_OF_MONTH);
+					String dtInclusao = ""+dtInclusaoObj.get(Calendar.YEAR)+","+(dtInclusaoObj.get(Calendar.MONTH))+","+dtInclusaoObj.get(Calendar.DAY_OF_MONTH);
 					espacosDireita = 60 - dtInclusao.length();
 					for (int i=1; i <= espacosDireita; i++) dtInclusao += " ";
 					GregorianCalendar dataUltAlteracaoObj = auxClient.getDataUltAlteracao();
-					String dataUltAlteracao = ""+dataUltAlteracaoObj.get(Calendar.YEAR)+","+(dataUltAlteracaoObj.get(Calendar.MONTH)+1)+","+dataUltAlteracaoObj.get(Calendar.DAY_OF_MONTH);
+					String dataUltAlteracao = ""+dataUltAlteracaoObj.get(Calendar.YEAR)+","+(dataUltAlteracaoObj.get(Calendar.MONTH))+","+dataUltAlteracaoObj.get(Calendar.DAY_OF_MONTH);
 					
 					writer.write(codigo+nome+cpf+telefone+email+dtInclusao+dataUltAlteracao+"\n");
 				}
